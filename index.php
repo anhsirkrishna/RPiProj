@@ -17,13 +17,30 @@ if($_GET['action']=="Record")
  header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/");
 }
 
-$del_vid = $_GET['delete'];
+if($_GET['action']=="Capture")
+{
+ $command = escapeshellcmd("./capimg.py");
+ $test1 = exec($command);
+ $test2 = exec("./saveimg.sh");
+ //echo '<pre>'.$test2.'</pre>';
+ header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/");
+}
 
+$del_vid = $_GET['delete'];
+$del_img = $_GET['deleteimg'];
 if(isset($del_vid))
 {
  $command = escapeshellcmd("./delvid.sh $del_vid");
  //echo '<pre>'.$command.'</pre>';
  $test = exec($command);
+ header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/");
+}
+
+if(isset($del_img))
+{
+ $command = escapeshellcmd("./delimg.sh $del_img");
+ $test = exec($command);
+ //echo '<pre>'.$test.'</pre>'; 
  header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/");
 }
 
@@ -66,8 +83,16 @@ echo '<link href="my.css" rel="stylesheet">';
 
 //Record button
 echo '<h1><center>Hit the button to start recording</center></h1>';
-echo '<center><a href="?action=Record" class="btn btn-primary btn-large">Start Record</a><center>';
-
+echo '<div class="container">';
+echo '<div class="row">';
+echo '<div class="col-xs-6">'; 
+echo '<a href="?action=Record" class="btn btn-info btn-large">Start Record</a>';
+echo '</div>';
+echo '<div class="col-xs-6">';
+echo '<a href="?action=Capture" class="btn btn-info btn-large">Capture Image</a>';
+echo '</div>';
+echo '</div>';
+echo '</div>';
 echo '<br>';
 
 //Image display
@@ -85,8 +110,9 @@ echo '<div class="row">';
 foreach ($images as $image)
 {
 echo '<div class="col-md-4">';
+echo '<center><a href="?deleteimg='.basename($image).'" class="btn btn-danger btn-small">Delete</a></center>';
 echo '<a href="/media/drive/images/'.basename($image).'" class="thumbnail">';
-echo '<p>'.basename($image).'</p>';
+echo '<center><p>'.basename($image).'</p></center>';
 echo '<img src="/media/drive/images/'.basename($image).'" alt="'.basename($image).'" class="img-responsive">';
 echo '</a>';
 echo '</div>';
@@ -119,10 +145,10 @@ foreach ($videos as $video)
 {
 echo '<div class="col-md-6">';
 echo '<div class="row" style="padding:5px 0px 0px 0px">';
-echo '<span class="label label-primary">'.basename($video).'</span>';
+echo '<center><h6 width="100%" style="background-color:lightblue">'.basename($video).'</h6></center>';
 echo '</div>';
 echo '<video src="/media/drive/videos/'.basename($video).'" controls width="100%"></video>';
-echo '<a href="?delete='.basename($video).'" class="btn btn-primary btn-small">Delete</a>';
+echo '<center><a href="?delete='.basename($video).'" class="btn btn-danger btn-small">Delete</a></center>';
 echo '</div>';
 $count = $count + 1;
 if($count == 2)
