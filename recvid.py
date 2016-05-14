@@ -8,7 +8,7 @@ import RPi.GPIO as GPIO
 import configparser
 
 config = configparser.RawConfigParser()
-filenames=['/home/pi/Workspace/RPiProj/config.cfg','/media/drive/config.cfg']
+filenames=['config.cfg','/media/drive/config.cfg']
 
 config.read(filenames)
 
@@ -24,6 +24,7 @@ print(hflip,vflip)
 rec_time = config.getint('CAM_SETUP','rec_time')
 resolution = (width,height)
 cwd = os.getcwd()
+print(cwd)
 with picamera.PiCamera() as camera:
 	camera.resolution = resolution
 	camera.fps = fps
