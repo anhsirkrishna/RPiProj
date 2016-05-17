@@ -8,34 +8,38 @@ import RPi.GPIO as GPIO
 import configparser
 
 config = configparser.RawConfigParser()
-filenames=['media/drive/config.cfg','config.cfg']
+filenames=['/home/pi/Workspace/RPiProj/config.cfg','/media/drive/config.cfg']
 
 config.read(filenames)
 
 led_pin = config.getint('PIN_SETUP','led_pin')
-
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(led_pin,GPIO.OUT)
-
+#GPIO.setmode(GPIO.BOARD)
+#GPIO.setup(led_pin,GPIO.OUT)
 fps = config.getint('CAM_SETUP','framerate')
 height = config.getint('CAM_SETUP','height')
 width = config.getint('CAM_SETUP','width')
+hflip = config.getint('CAM_SETUP','horizontal_flip')
+vflip = config.getint('CAM_SETUP','vertical_flip')
+print(hflip,vflip)
+rec_time = config.getint('CAM_SETUP','rec_time')
 resolution = (width,height)
-
 cwd = os.getcwd()
-
 with picamera.PiCamera() as camera:
 	camera.resolution = resolution
 	camera.fps = fps
+	camera.hflip = hflip
+	camera.vflip = vflip
+	print(camera.hflip,camera.vflip)
 	try:
-		camera.start_recording('vid.h264')
-		GPIO.output(led_pin,1)
-		while True:
-			camera.wait_recording(1)
-	except KeyboardInterrupt:
+		camera.start_recording(cwd+'/vid.h264')
+		print(rec_time)
+		#GPIO.output(led_pin,1)
+		camera.wait_recording(rec_time)
 		camera.stop_recording()
-		GPIO.output(led_pin,0)
+		#GPIO.output(led_pin,0)
 
-p = subprocess.Popen(cwd+"/savevid.sh",stdout=PIPE)
-outmsg = p.communicate()
-GPIO.cleanup()
+	except :
+		print("Couldn't start recording")
+		exit()
+
+#GPIO.cleanup()

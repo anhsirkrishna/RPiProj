@@ -8,6 +8,15 @@ $test=shell_exec("touch /tmp/restart");
 echo '<pre>Restarting ... Please refresh after a minute</pre>';
 }
 
+if($_GET['action']=="Record")
+{
+ $command = escapeshellcmd("./recvid.py");
+ $time = exec($command);
+ $test = exec("./savevid.sh");
+ header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/");
+}
+
+
 //Check config file
 $conf = parse_ini_file("/media/drive/conf.ini"); //Conf file fount in the root folder of the external memory device
 
@@ -25,6 +34,7 @@ if(isset($conf['video_streaming']))
 if(isset($conf['labels']))
         {$labels = strtolower($conf['labels']);}
 
+
 //HTML header
 echo '<html>';
 echo '<head><title>'.$title.'</title></head>';
@@ -39,6 +49,11 @@ echo '</script>';
 echo '<link href="bootstrap/css/bootstrap.css" rel="stylesheet">';
 echo '<link href="my.css" rel="stylesheet">';
 
+//Record button
+echo '<h1><center>Hit the button to start recording</center></h1>';
+echo '<center><a href="?action=Record" class="btn btn_primary btn-large">Start Record</a><center>';
+
+echo '<br>';
 
 if ($videodisplay != 'disabled')
 {
