@@ -2,6 +2,8 @@
 
 import picamera
 import subprocess
+from subprocess import PIPE
+import os
 import RPi.GPIO as GPIO
 import configparser
 
@@ -20,6 +22,8 @@ height = config.getint('CAM_SETUP','height')
 width = config.getint('CAM_SETUP','width')
 resolution = (width,height)
 
+cwd = os.getcwd()
+
 with picamera.PiCamera() as camera:
 	camera.resolution = resolution
 	camera.fps = fps
@@ -32,4 +36,6 @@ with picamera.PiCamera() as camera:
 		camera.stop_recording()
 		GPIO.output(led_pin,0)
 
+p = subprocess.Popen(cwd+"/savevid.sh",stdout=PIPE)
+outmsg = p.communicate()
 GPIO.cleanup()
