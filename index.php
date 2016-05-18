@@ -8,24 +8,27 @@ $test=shell_exec("touch /tmp/restart");
 echo '<pre>Restarting ... Please refresh after a minute</pre>';
 }
 
+//Record vid routine
 if($_GET['action']=="Record")
 {
  $command = escapeshellcmd("./recvid.py");
  $time = exec($command);
  $test = exec("./savevid.sh");
- //echo '<pre>'.$test.'</pre>';
+ //echo '<pre>'.$time.'</pre>';
  header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/");
 }
 
+//capture image routine
 if($_GET['action']=="Capture")
 {
  $command = escapeshellcmd("./capimg.py");
  $test1 = exec($command);
  $test2 = exec("./saveimg.sh");
- //echo '<pre>'.$test2.'</pre>';
- header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/");
+ echo '<pre>'.$test1.'</pre>';
+ //header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/");
 }
 
+//Del img and vid routine
 $del_vid = $_GET['delete'];
 $del_img = $_GET['deleteimg'];
 if(isset($del_vid))
@@ -43,6 +46,9 @@ if(isset($del_img))
  //echo '<pre>'.$test.'</pre>'; 
  header("Location: " . "http://" . $_SERVER['HTTP_HOST'] . "/");
 }
+
+$size = exec("./check_space.sh");
+
 
 //Check config file
 $conf = parse_ini_file("/media/drive/conf.ini"); //Conf file fount in the root folder of the external memory device
@@ -81,6 +87,7 @@ echo '</script>';
 echo '<link href="bootstrap/dist/css/bootstrap.css" rel="stylesheet">';
 echo '<link href="my.css" rel="stylesheet">';
 
+echo '<div class="panel panel-warning">USB Space Used : '.$size.'</div>';
 //Record button
 echo '<h1><center>Hit the button to start recording</center></h1>';
 echo '<div class="container">';
