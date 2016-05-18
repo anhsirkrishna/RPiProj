@@ -87,9 +87,15 @@ echo '</script>';
 echo '<link href="bootstrap/dist/css/bootstrap.css" rel="stylesheet">';
 echo '<link href="my.css" rel="stylesheet">';
 
-echo '<div class="panel panel-warning">USB Space Used : '.$size.'</div>';
+echo '<div class="panel panel-default">USB Usage :';
+echo '<div class="panel-body">';
+echo '<div class="progress">';
+echo '<div class="progress-bar progress-bar-warning" role="progressbar" style="width:'.$size.'">'.$size.'</div>';
+echo '</div>';
+echo '</div>';
+echo '</div>';
 //Record button
-echo '<h1><center>Hit the button to start recording</center></h1>';
+echo '<h1><center>Record Video or Capture Image</center></h1>';
 echo '<div class="container">';
 echo '<div class="row">';
 echo '<div class="col-xs-6">'; 
